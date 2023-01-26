@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesion</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <form action="/authenticate" method="POST" onsubmit="return authenticate()">
+        <h2>Iniciar Sesión</h2>
+        <div class="section">
+            <div class="tittle">Usuario</div>
+            <div class="field"><input type="text" id="username" name="username"></div>
+        </div>
+        <div class="section">
+            <div class="tittle">Contraseña</div>
+            <div class="field"><input type="password" id="password" name="password"></div>
+        </div>
+        <div class="section">
+            <div class="button"><input type="submit" value="Iniciar Sesión"></div>
+            <div class="button"><a href="./singup.html">Crear una Cuenta</a></div>
+        </div>
+    </form>
+    
+    <script>
+        function authenticate() {
+            // Recolectar los datos del formulario
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+    
+            // Enviar datos al servidor
+            fetch("/authenticate", {
+                method: "POST",
+                body: JSON.stringify({ username, password }),
+                headers: { "Content-Type": "application/json" }
+            })
+                .then(res => res.text())
+                .then(data => {
+                    // Mostrar mensaje según respuesta del servidor
+                    if (data === "ERROR AL AUTENTICAR AL USUARIO") {
+                        alert("Error al autenticar al usuario");
+                    } else if (data === "EL USUARIO NO EXISTE") {
+                        alert("El usuario no existe");
+                    } else if (data === "ERROR AL AUTENTICAR") {
+                        alert("Error al autenticar");
+                    } else if (data === "USUARIO Y/O CONTRASEÑA INCORRECTA") {
+                        alert("Usuario y/o contraseña incorrecta");
+                    } else if (data === "USUARIO AUTENTICADO CORRECTAMENTE") {
+                        // Guardar nombre de usuario en sesión
+                        sessionStorage.setItem("username", username);
+                        // Redirigir a página de inicio
+                        location.href = "/index.html";
+                    }
+                });
+            return false;
+        }
+    </script>
+    <!-- <form action="/authenticate" method="POST">
+        <h2>Iniciar Sesion</h2>
+        <div class="section">
+            <div class="tittle">Usuario</div>
+            <div class="field"><input type="text" id="username" name="username"></div>
+        </div>
+        <div class="section">
+            <div class="tittle">Contrañesa</div>
+            <div class="field"><input type="text" id="password" name="password"></div>
+        <div class="section">
+                <div class="button"><input type="submit" value="Iniciar Sesion"></div>
+                <div class="button"><a href="./singup.html">Crear una Cuenta</a></div>
+        </div> -->
+        
+    </form>
+</body>
+</html>

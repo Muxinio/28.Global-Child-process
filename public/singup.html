@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <form action="/register" method="POST" onsubmit="return register()">
+        <h2>Registrarse</h2>
+        <div class="section">
+            <div class="tittle">Usuario</div>
+            <div class="field"><input type="text" id="username" name="username"></div>
+        </div>
+        <div class="section">
+            <div class="tittle">Contraseña</div>
+            <div class="field"><input type="password" id="password" name="password"></div>
+        </div>
+        <div class="section">
+            <div class="button"><input type="submit" value="Registrarse"></div>
+            <div class="button"><a href="./login.html">¿Ya tienes Cuenta? Inicia Sesion</a></div>
+        </div>
+    </form>
+    
+    <script>
+        function register() {
+            // Recolectar los datos del formulario
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+    
+            // Enviar datos al servidor
+            fetch("/register", {
+                method: "POST",
+                body: JSON.stringify({ username, password }),
+                headers: { "Content-Type": "application/json" }
+            })
+                .then(res => res.text())
+                .then(data => {
+                    // Mostrar mensaje según respuesta del servidor
+                    if (data === "ERROR AL REGISTRAR AL USUARIO") {
+                        alert("Usuario Existente");
+                    }else if (data === "Usuario Registrado") {
+                        alert("Usuario Registrado");
+                        // Guardar nombre de usuario en sesión
+                        sessionStorage.setItem("username", username);
+                        // Redirigir a página de inicio
+                        location.href = "/login.html";
+                    }});
+            return false;
+        }
+    </script>
+    </form>
+</body>
+</html>

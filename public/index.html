@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina principal</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <body>
+        <script>
+        
+        </script>
+    </body>
+        <header>
+            <nav>
+                <button id="login-btn" onclick="goToLogin()">Iniciar Sesión</button>
+                <form action="/logout" method="post">
+                    <span id="username" style="display:none"></span>
+                    <button id="logout-btn" style="display:none" type="submit" onClick="logout()">Cerrar Sesión</button>
+                </form>
+            </nav>
+        </header>
+    
+        <script>    
+            let isLoggedIn = false; 
+            
+            function goToLogin() {
+                window.location.href = "login.html";
+            }
+            function logout() {
+        fetch("/logout", {
+            method: "POST",
+        })
+        .then(res => res.text())
+        .then(data => {
+            if(data === "SESION CERRADA"){
+                alert("Sesión cerrada correctamente");
+                location.href = "/index.html";
+                updateUI();
+            }
+        });
+}    
+                function updateUI() {
+                 fetch("/username", {
+                    method: "GET",
+                     })
+                .then(res => res.text())
+                .then(data => {
+                 if (data) {
+                     document.getElementById("login-btn").style.display = "none";
+                     document.getElementById("logout-btn").style.display = "block";
+                    document.getElementById("username").innerHTML = "Bienvenido, " + data;
+                    document.getElementById("username").style.display = "block";
+                     isLoggedIn = true; 
+                     } else {
+                        document.getElementById("login-btn").style.display = "block";
+                        document.getElementById("logout-btn").style.display = "none";
+                        document.getElementById("username").style.display = "none";
+                    }
+                }
+                )
+            }
+
+
+      updateUI();
+
+      
+         </script>          
+</body>
+</html>
